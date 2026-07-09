@@ -248,13 +248,28 @@
                     ctx.fillStyle = '#facc15';
                     ctx.shadowBlur = 10;
                     ctx.shadowColor = '#eab308';
+                    ctx.fillRect(x, y, gridSize - 2, gridSize - 2);
+                } else if (index === snake.length - 1) {
+                    // Tail - triangle pointing in direction of movement
+                    ctx.fillStyle = '#fbbf24';
+                    ctx.shadowBlur = 5;
+                    ctx.shadowColor = '#f59e0b';
+                    ctx.beginPath();
+                    const centerX = x + (gridSize - 2) / 2;
+                    const centerY = y + (gridSize - 2) / 2;
+                    // Point downward
+                    ctx.moveTo(centerX, centerY + 6);
+                    ctx.lineTo(centerX - 5, centerY - 4);
+                    ctx.lineTo(centerX + 5, centerY - 4);
+                    ctx.closePath();
+                    ctx.fill();
                 } else {
                     // Body - slightly darker yellow
                     ctx.fillStyle = '#fbbf24';
                     ctx.shadowBlur = 5;
                     ctx.shadowColor = '#f59e0b';
+                    ctx.fillRect(x, y, gridSize - 2, gridSize - 2);
                 }
-                ctx.fillRect(x, y, gridSize - 2, gridSize - 2);
             });
 
             // Draw eyes on head
