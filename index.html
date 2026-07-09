@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Caterpillar Game</title>
+    <title>Snake Game</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -50,12 +50,12 @@
         }
 
         canvas {
-            background: #4ade80;
-            border: 3px solid #166534;
+            background: #0f0f0f;
+            border: 3px solid white;
             border-radius: 8px;
             display: block;
             margin: 0 auto;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
         }
 
         .controls {
@@ -139,7 +139,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>🐛 Caterpillar Game</h1>
+        <h1>🐍 Snake Game</h1>
 
         <div class="game-info">
             <div class="score">Score: <span id="score">0</span></div>
@@ -149,8 +149,8 @@
         <canvas id="gameCanvas" width="400" height="400"></canvas>
 
         <div class="controls">
-            <p>Use arrow keys or WASD to control the caterpillar</p>
-            <p>Eat the pink leaves to grow and earn points</p>
+            <p>Use arrow keys or WASD to control the snake</p>
+            <p>Eat the food to grow and earn points</p>
             <button onclick="resetGame()">New Game</button>
         </div>
     </div>
@@ -170,11 +170,7 @@
         const gridSize = 20;
         const tileCount = canvas.width / gridSize;
 
-        let snake = [
-            { x: 10, y: 10 },
-            { x: 9, y: 10 },
-            { x: 8, y: 10 }
-        ];
+        let snake = [{ x: 10, y: 10 }];
         let food = { x: 15, y: 15 };
         let direction = { x: 1, y: 0 };
         let nextDirection = { x: 1, y: 0 };
@@ -235,80 +231,35 @@
         }
 
         function draw() {
-            ctx.fillStyle = '#4ade80';
+            ctx.fillStyle = '#0f0f0f';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Draw caterpillar
+            // Draw snake
             snake.forEach((segment, index) => {
-                const x = segment.x * gridSize + 1;
-                const y = segment.y * gridSize + 1;
-
                 if (index === 0) {
-                    // Head - yellow with glow
-                    ctx.fillStyle = '#facc15';
+                    // Head
+                    ctx.fillStyle = '#4ade80';
                     ctx.shadowBlur = 10;
-                    ctx.shadowColor = '#eab308';
-                    ctx.fillRect(x, y, gridSize - 2, gridSize - 2);
-                } else if (index === snake.length - 1) {
-                    // Tail - triangle pointing in direction of movement
-                    ctx.fillStyle = '#fbbf24';
-                    ctx.shadowBlur = 5;
-                    ctx.shadowColor = '#f59e0b';
-                    ctx.beginPath();
-                    const centerX = x + (gridSize - 2) / 2;
-                    const centerY = y + (gridSize - 2) / 2;
-                    // Point downward
-                    ctx.moveTo(centerX, centerY + 6);
-                    ctx.lineTo(centerX - 5, centerY - 4);
-                    ctx.lineTo(centerX + 5, centerY - 4);
-                    ctx.closePath();
-                    ctx.fill();
+                    ctx.shadowColor = '#4ade80';
                 } else {
-                    // Body - slightly darker yellow
-                    ctx.fillStyle = '#fbbf24';
+                    ctx.fillStyle = '#22c55e';
                     ctx.shadowBlur = 5;
-                    ctx.shadowColor = '#f59e0b';
-                    ctx.fillRect(x, y, gridSize - 2, gridSize - 2);
+                    ctx.shadowColor = '#22c55e';
                 }
+                ctx.fillRect(
+                    segment.x * gridSize + 1,
+                    segment.y * gridSize + 1,
+                    gridSize - 2,
+                    gridSize - 2
+                );
             });
-
-            // Draw eyes on head
-            if (snake.length > 0) {
-                const head = snake[0];
-                const headX = head.x * gridSize + gridSize / 2;
-                const headY = head.y * gridSize + gridSize / 2;
-
-                ctx.fillStyle = '#000';
-                ctx.shadowBlur = 0;
-                // Left eye
-                ctx.beginPath();
-                ctx.arc(headX - 4, headY - 3, 2.5, 0, Math.PI * 2);
-                ctx.fill();
-                // Right eye
-                ctx.beginPath();
-                ctx.arc(headX + 4, headY - 3, 2.5, 0, Math.PI * 2);
-                ctx.fill();
-
-                // Tongue
-                ctx.strokeStyle = '#ff1493';
-                ctx.lineWidth = 1.5;
-                ctx.lineCap = 'round';
-                ctx.beginPath();
-                ctx.moveTo(headX, headY + 3);
-                ctx.lineTo(headX - 2, headY + 8);
-                ctx.stroke();
-                ctx.beginPath();
-                ctx.moveTo(headX, headY + 3);
-                ctx.lineTo(headX + 2, headY + 8);
-                ctx.stroke();
-            }
 
             ctx.shadowBlur = 0;
 
-            // Draw food (pink leaves)
-            ctx.fillStyle = '#ec4899';
+            // Draw food
+            ctx.fillStyle = '#ff6b6b';
             ctx.shadowBlur = 10;
-            ctx.shadowColor = '#be185d';
+            ctx.shadowColor = '#ff6b6b';
             ctx.beginPath();
             ctx.arc(
                 food.x * gridSize + gridSize / 2,
@@ -340,11 +291,7 @@
         }
 
         function resetGame() {
-            snake = [
-                { x: 10, y: 10 },
-                { x: 9, y: 10 },
-                { x: 8, y: 10 }
-            ];
+            snake = [{ x: 10, y: 10 }];
             direction = { x: 1, y: 0 };
             nextDirection = { x: 1, y: 0 };
             score = 0;
